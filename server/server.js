@@ -12,7 +12,7 @@ app.use(cors());
 
 const authCheck = jwt({
   secret: 'AUTH0_CLIENT_SECRET',
-  audience: 'AUTH0_CLIENT_ID'
+  audience: 'AUTH0_CLIENT_ID '
 });
 
 app.get('/api/jokes/food', (req, res)=>{
