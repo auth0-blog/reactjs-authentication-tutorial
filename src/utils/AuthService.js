@@ -1,11 +1,7 @@
 import decode from 'jwt-decode';
-import {EventEmitter} from 'events';
-import React, {Component, PropTypes} from 'react';
 import { browserHistory } from 'react-router';
 import Auth0Lock from 'auth0-lock';
 const ID_TOKEN_KEY = 'id_token';
-const ACCESS_TOKEN_KEY = 'access_token';
-const PROFILE_KEY = 'profile';
 
 
 const lock = new Auth0Lock('rdCpwbmpgJK0RXm0ixegPrkYGy3cy3FH', 'unicoder.auth0.com', {
@@ -15,8 +11,6 @@ const lock = new Auth0Lock('rdCpwbmpgJK0RXm0ixegPrkYGy3cy3FH', 'unicoder.auth0.c
     }
   }
 );
-
-const events = new EventEmitter();
 
 lock.on('authenticated', authResult => {
   setIdToken(authResult.idToken);
