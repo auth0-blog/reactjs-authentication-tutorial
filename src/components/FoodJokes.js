@@ -53,10 +53,10 @@ class FoodJokes extends Component {
 
         <div className="col-sm-12">
           { isLoggedIn() ?
-            <div className="jumbotron text-center">
-              <h2>View Celebrity Jokes</h2>
-              <Link className="btn btn-lg btn-success" to='/special'> Celebrity Jokes </Link>
-            </div> : ''
+          <div className="jumbotron text-center">
+            <h2>View Celebrity Jokes</h2>
+            <Link className="btn btn-lg btn-success" to='/special'> Celebrity Jokes </Link>
+          </div> : ''
           }
         </div>
       </div>

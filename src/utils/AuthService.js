@@ -42,7 +42,7 @@ function setIdToken(idToken) {
   localStorage.setItem(ID_TOKEN_KEY, idToken);
 }
 
-function getIdToken() {
+export function getIdToken() {
   return localStorage.getItem(ID_TOKEN_KEY);
 }
 
