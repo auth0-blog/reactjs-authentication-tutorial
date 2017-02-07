@@ -19,7 +19,3 @@ npm install
 
 # Run your app
 npm start
-
-# Run your migrations
-php artisan migrate
-
