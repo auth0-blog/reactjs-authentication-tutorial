@@ -2,7 +2,7 @@
 
 This is the code that accompanies the **ReactJS Authentication Tutorial** on *Auth0 Blog*
 
-![World Chuck Norris App](https://cdn.auth0.com/blog/react/working_chuck_norris_app.gif)
+![World Chuck Norris App](https://cdn.auth0.com/blog/react/login.png)
 
 ## Installation
 
