@@ -15,7 +15,7 @@ const authCheck = jwt({
   audience: 'AUTH0_CLIENT_ID '
 });
 
-app.get('/api/jokes/food', (req, res)=>{
+app.get('/api/jokes/food', (req, res) => {
   let foodJokes = [
   {
     id: 99991,
@@ -45,7 +45,7 @@ app.get('/api/jokes/food', (req, res)=>{
   res.json(foodJokes);
 })
 
-app.get('/api/jokes/celebrity', (req,res)=>{
+app.get('/api/jokes/celebrity', (req,res) => {
   let CelebrityJokes = [
   {
     id: 88881,
