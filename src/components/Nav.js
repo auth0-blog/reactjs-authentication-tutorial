@@ -19,7 +19,6 @@ class Nav extends Component {
             { 
              ( isLoggedIn() ) ? <Link to="/special">Celebrity Jokes</Link> :  ''
             }
-          
           </li>
         </ul>
         <ul className="nav navbar-nav navbar-right">
