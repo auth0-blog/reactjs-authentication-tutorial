@@ -4,7 +4,7 @@ import Auth0Lock from 'auth0-lock';
 const ID_TOKEN_KEY = 'id_token';
 
 
-const lock = new Auth0Lock('rdCpwbmpgJK0RXm0ixegPrkYGy3cy3FH', 'unicoder.auth0.com', {
+const lock = new Auth0Lock('AUTH0_CLIENT_ID', 'AUTH0_DOMAIN', {
     auth: {
       redirectUrl: `${window.location.origin}`,
       responseType: 'token'
