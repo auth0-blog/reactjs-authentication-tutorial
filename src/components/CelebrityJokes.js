@@ -16,7 +16,7 @@ class CelebrityJokes extends Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getCelebrityJokes();
   }
 

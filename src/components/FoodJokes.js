@@ -18,7 +18,7 @@ class FoodJokes extends Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getFoodJokes();
   }
 
