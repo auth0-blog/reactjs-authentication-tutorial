@@ -1,17 +1,35 @@
 import decode from 'jwt-decode';
 import { browserHistory } from 'react-router';
+import Auth0Lock from 'auth0-lock';
 const ID_TOKEN_KEY = 'id_token';
-const ACCESS_TOKEN_KEY = 'access_token';
 
 
-export function login() {
-  window.location.href = `https://unicoder.auth0.com/authorize?scope=full_access&audience=http://chucknorrisworld.com&response_type=id_token%20token&client_id=R2kf5h0OmEi4xwW9QY0EQNcseGdmrKwY&redirect_uri=http://localhost:3000/callback&nonce=${generateNonce()}`;
+const lock = new Auth0Lock('rdCpwbmpgJK0RXm0ixegPrkYGy3cy3FH', 'unicoder.auth0.com', {
+    auth: {
+      redirectUrl: `${window.location.origin}`,
+      responseType: 'token'
+    }
+  }
+);
+
+lock.on('authenticated', authResult => {
+  setIdToken(authResult.idToken);
+  browserHistory.push('/special');
+});
+
+export function login(options) {
+  lock.show(options);
+
+  return {
+    hide() {
+      lock.hide();
+    }
+  }
 }
 
 export function logout() {
   clearIdToken();
-  clearAccessToken();
-  browserHistory.push('/special');
+  browserHistory.replace('/');
 }
 
 export function requireAuth(nextState, replace) {
@@ -20,70 +38,16 @@ export function requireAuth(nextState, replace) {
   }
 }
 
+function setIdToken(idToken) {
+  localStorage.setItem(ID_TOKEN_KEY, idToken);
+}
+
 export function getIdToken() {
   return localStorage.getItem(ID_TOKEN_KEY);
 }
 
-export function getAccessToken() {
-  return localStorage.getItem(ACCESS_TOKEN_KEY);
-}
-
 function clearIdToken() {
   localStorage.removeItem(ID_TOKEN_KEY);
-}
-
-function clearAccessToken() {
-  localStorage.removeItem(ACCESS_TOKEN_KEY);
-}
-
-// Helper function that will allow us to extract the access_token and id_token
-function getParameterByName(name) {
-  let match = RegExp('[#&]' + name + '=([^&]*)').exec(window.location.hash);
-  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
-
-// Get and store access_token in local storage
-export function setAccessToken() {
-  let accessToken = getParameterByName('access_token');
-  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-}
-
-// Get and store id_token in local storage
-export function setIdToken() {
-  let idToken = getParameterByName('id_token');
-  localStorage.setItem(ID_TOKEN_KEY, idToken);
-  decodeIdToken(idToken);
-}
-
-// Decode id_token to verify the nonce
-function decodeIdToken(token) {
-  const jwt = decode(token);
-  verifyNonce(jwt.nonce);
-}
-
-// Function to generate a nonce which will be used to mitigate replay attacks
-function generateNonce() {
-  let existing = localStorage.getItem('nonce');
-  if (existing === null) {
-    let nonce = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 16; i++) {
-        nonce += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    localStorage.setItem('nonce', nonce);
-    return nonce;
-  }
-  return localStorage.getItem('nonce');
-}
-
-// Verify the nonce once user has authenticated. If the nonce can't be verified we'll log the user out
-function verifyNonce(nonce) {
-  if (nonce !== localStorage.getItem('nonce')) {
-    clearIdToken();
-    clearAccessToken();
-  }
-
-  window.location.href = "/";
 }
 
 export function isLoggedIn() {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken } from './AuthService';
+import { getIdToken } from './AuthService';
 
 const BASE_URL = 'http://localhost:3333';
 
@@ -12,6 +12,5 @@ function getFoodData() {
 
 function getCelebrityData() {
   const url = `${BASE_URL}/api/jokes/celebrity`;
-  //return axios.get(url).then(response => response.data);
-  return axios.get(url, { headers: { Authorization: `Bearer ${getAccessToken()}` }}).then(response => response.data);
+  return axios.get(url, { headers: { Authorization: `Bearer ${getIdToken()}` }}).then(response => response.data);
 }

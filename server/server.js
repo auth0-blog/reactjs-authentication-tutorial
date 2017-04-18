@@ -11,19 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const authCheck = jwt({
-  secret: jwks.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: "https://unicoder.auth0.com/.well-known/jwks.json"
-    }),
-  
-    // This is the identifier we set when we created the API
-    audience: 'http://chucknorrisworld.com',
-    issuer: "https://unicoder.auth0.com/",
-    algorithms: ['RS256']
+  secret: 'AUTH0_CLIENT_SECRET',
+  audience: 'AUTH0_CLIENT_ID '
 });
-
 
 app.get('/api/jokes/food', (req, res) => {
   let foodJokes = [
