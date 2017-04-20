@@ -1,17 +1,33 @@
 import decode from 'jwt-decode';
 import { browserHistory } from 'react-router';
+import auth0 from 'auth0-js';
 const ID_TOKEN_KEY = 'id_token';
 const ACCESS_TOKEN_KEY = 'access_token';
 
+const CLIENT_ID = 'R2kf5h0OmEi4xwW9QY0EQNcseGdmrKwY';
+const CLIENT_DOMAIN = 'unicoder.auth0.com';
+const REDIRECT = 'http://localhost:3000/callback';
+const SCOPE = 'full_access';
+const AUDIENCE = 'http://chucknorrisworld.com';
+
+var auth = new auth0.WebAuth({
+  clientID: CLIENT_ID,
+  domain: CLIENT_DOMAIN
+});
 
 export function login() {
-  window.location.href = `https://unicoder.auth0.com/authorize?scope=full_access&audience=http://chucknorrisworld.com&response_type=id_token%20token&client_id=R2kf5h0OmEi4xwW9QY0EQNcseGdmrKwY&redirect_uri=http://localhost:3000/callback&nonce=${generateNonce()}`;
+  auth.authorize({
+    responseType: 'token id_token',
+    redirectUri: REDIRECT,
+    audience: AUDIENCE,
+    scope: SCOPE
+  });
 }
 
 export function logout() {
   clearIdToken();
   clearAccessToken();
-  browserHistory.push('/special');
+  browserHistory.push('/');
 }
 
 export function requireAuth(nextState, replace) {
@@ -52,38 +68,6 @@ export function setAccessToken() {
 export function setIdToken() {
   let idToken = getParameterByName('id_token');
   localStorage.setItem(ID_TOKEN_KEY, idToken);
-  decodeIdToken(idToken);
-}
-
-// Decode id_token to verify the nonce
-function decodeIdToken(token) {
-  const jwt = decode(token);
-  verifyNonce(jwt.nonce);
-}
-
-// Function to generate a nonce which will be used to mitigate replay attacks
-function generateNonce() {
-  let existing = localStorage.getItem('nonce');
-  if (existing === null) {
-    let nonce = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 16; i++) {
-        nonce += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    localStorage.setItem('nonce', nonce);
-    return nonce;
-  }
-  return localStorage.getItem('nonce');
-}
-
-// Verify the nonce once user has authenticated. If the nonce can't be verified we'll log the user out
-function verifyNonce(nonce) {
-  if (nonce !== localStorage.getItem('nonce')) {
-    clearIdToken();
-    clearAccessToken();
-  }
-
-  window.location.href = "/";
 }
 
 export function isLoggedIn() {
