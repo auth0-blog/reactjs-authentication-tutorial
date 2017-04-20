@@ -1,35 +1,33 @@
 import decode from 'jwt-decode';
 import { browserHistory } from 'react-router';
-import Auth0Lock from 'auth0-lock';
+import auth0 from 'auth0-js';
 const ID_TOKEN_KEY = 'id_token';
+const ACCESS_TOKEN_KEY = 'access_token';
 
+const CLIENT_ID = '{AUTH0_CLIENT_ID}';
+const CLIENT_DOMAIN = '{AUTH0_DOMAIN}';
+const REDIRECT = 'YOUR_CALLBACK_URL';
+const SCOPE = '{SCOPE}';
+const AUDIENCE = 'AUDIENCE_ATTRIBUTE';
 
-const lock = new Auth0Lock('rdCpwbmpgJK0RXm0ixegPrkYGy3cy3FH', 'unicoder.auth0.com', {
-    auth: {
-      redirectUrl: `${window.location.origin}`,
-      responseType: 'token'
-    }
-  }
-);
-
-lock.on('authenticated', authResult => {
-  setIdToken(authResult.idToken);
-  browserHistory.push('/special');
+var auth = new auth0.WebAuth({
+  clientID: CLIENT_ID,
+  domain: CLIENT_DOMAIN
 });
 
-export function login(options) {
-  lock.show(options);
-
-  return {
-    hide() {
-      lock.hide();
-    }
-  }
+export function login() {
+  auth.authorize({
+    responseType: 'token id_token',
+    redirectUri: REDIRECT,
+    audience: AUDIENCE,
+    scope: SCOPE
+  });
 }
 
 export function logout() {
   clearIdToken();
-  browserHistory.replace('/');
+  clearAccessToken();
+  browserHistory.push('/');
 }
 
 export function requireAuth(nextState, replace) {
@@ -38,16 +36,38 @@ export function requireAuth(nextState, replace) {
   }
 }
 
-function setIdToken(idToken) {
-  localStorage.setItem(ID_TOKEN_KEY, idToken);
-}
-
 export function getIdToken() {
   return localStorage.getItem(ID_TOKEN_KEY);
 }
 
+export function getAccessToken() {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
 function clearIdToken() {
   localStorage.removeItem(ID_TOKEN_KEY);
+}
+
+function clearAccessToken() {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+}
+
+// Helper function that will allow us to extract the access_token and id_token
+function getParameterByName(name) {
+  let match = RegExp('[#&]' + name + '=([^&]*)').exec(window.location.hash);
+  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+// Get and store access_token in local storage
+export function setAccessToken() {
+  let accessToken = getParameterByName('access_token');
+  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+}
+
+// Get and store id_token in local storage
+export function setIdToken() {
+  let idToken = getParameterByName('id_token');
+  localStorage.setItem(ID_TOKEN_KEY, idToken);
 }
 
 export function isLoggedIn() {
