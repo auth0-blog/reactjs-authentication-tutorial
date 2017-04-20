@@ -11,8 +11,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const authCheck = jwt({
-  secret: 'AUTH0_CLIENT_SECRET',
-  audience: 'AUTH0_CLIENT_ID '
+  secret: jwks.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        // YOUR-AUTH0-DOMAIN name e.g prosper.auth0.com
+        jwksUri: "https:///.well-known/jwks.json"
+    }),
+    // This is the identifier we set when we created the API
+    audience: '{YOUR-API-AUDIENCE-ATTRIBUTE}',
+    issuer: '{YOUR-AUTH0-DOMAIN}',
+    algorithms: ['RS256']
 });
 
 app.get('/api/jokes/food', (req, res) => {
@@ -45,7 +54,7 @@ app.get('/api/jokes/food', (req, res) => {
   res.json(foodJokes);
 })
 
-app.get('/api/jokes/celebrity', (req,res) => {
+app.get('/api/jokes/celebrity', authCheck, (req,res) => {
   let CelebrityJokes = [
   {
     id: 88881,
