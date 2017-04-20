@@ -6,6 +6,7 @@
     "react-scripts": "0.8.5"
   },
   "dependencies": {
+    "auth0-js": "^8.5.0",
     "auth0-lock": "^10.11.0",
     "axios": "^0.15.3",
     "jwt-decode": "^2.1.0",
