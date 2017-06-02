@@ -16,8 +16,8 @@ const authCheck = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        // YOUR-AUTH0-DOMAIN name e.g prosper.auth0.com
-        jwksUri: "https:///.well-known/jwks.json"
+        // YOUR-AUTH0-DOMAIN name e.g https://prosper.auth0.com
+        jwksUri: "{YOUR-AUTH0-DOMAIN}/.well-known/jwks.json"
     }),
     // This is the identifier we set when we created the API
     audience: '{YOUR-API-AUDIENCE-ATTRIBUTE}',
@@ -50,7 +50,7 @@ app.get('/api/jokes/food', (req, res) => {
   {
     id: 99996,
     joke: 'When Chuck Norris goes to out to eat, he orders a whole chicken, but he only eats its soul.'
-  } 
+  }
   ];
   res.json(foodJokes);
 })
@@ -80,7 +80,7 @@ app.get('/api/jokes/celebrity', authCheck, (req,res) => {
   {
     id: 88886,
     joke: "Hellen Keller's favorite color is Chuck Norris."
-  } 
+  }
   ];
   res.json(CelebrityJokes);
 })
