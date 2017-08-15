@@ -9,7 +9,7 @@ This is the code that accompanies the **ReactJS Authentication Tutorial** on *Au
 ```bash
 
 # Get the project
-git clone git@github.com:auth0-blog/reactjs-authentication-tutorial.git reactjs-authentication-tutorial
+git clone https://github.com/auth0-blog/reactjs-authentication-tutorial.git reactjs-authentication-tutorial
 
 # Change directory
 cd reactjs-authentication-tutorial
