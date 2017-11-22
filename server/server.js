@@ -25,8 +25,6 @@ const authCheck = jwt({
     algorithms: ['RS256']
 });
 
-
-
 app.get('/api/jokes/food', (req, res) => {
   let foodJokes = [
   {
